@@ -49,7 +49,7 @@
     function Attraction()
     {
         // 這邊是將頁面抓到輸入的字串
-        fetch(`http://127.0.0.1:3000/api/attraction?page=${nextPage}`, {})
+        fetch(`/api/attraction?page=${nextPage}`, {})
         .then((response) => {
             // 這裡會得到一個 ReadableStream 的物件
             // 可以透過 blob(), json(), text() 轉成可用的資訊
@@ -144,7 +144,7 @@
         // const data = {username}
         console.log(keywordElement);
         console.log(keyword,"打進去的字");
-        fetch(`http://127.0.0.1:3000/api/attraction?keyword=${keyword}`, {})
+        fetch(`/api/attraction?keyword=${keyword}`, {})
         .then((response) => {
             // 這裡會得到一個 ReadableStream 的物件
             // 可以透過 blob(), json(), text() 轉成可用的資訊
@@ -219,7 +219,7 @@
     }
     function apiCategory()
     {
-        fetch("http://127.0.0.1:3000/api/categories", {})
+        fetch("/api/categories", {})
         .then((response) => {
             // 這裡會得到一個 ReadableStream 的物件
             // 可以透過 blob(), json(), text() 轉成可用的資訊
@@ -299,7 +299,7 @@
                 if(nextPage!==null ){
                     console.log(nextPage,"1234567")
                     isLoading=true;
-                    fetch(`http://127.0.0.1:3000/api/attraction?page=${nextPage}&keyword=${keyword}`, {})
+                    fetch(`/api/attraction?page=${nextPage}&keyword=${keyword}`, {})
                 .then((response) => {
                     console.log(nextPage,"333333")
                     // 這裡會得到一個 ReadableStream 的物件
