@@ -7,11 +7,11 @@ body{
 #navigation_bar{
     display: flex;
     margin: 0 auto;
-    width:1200px;
+    max-width: 1200px;
     
 }
 .left{
-    font-size: 20px;
+    font-size: 30px;
     width:150px ;
     color: #448899;
     align-items: center;
@@ -19,7 +19,8 @@ body{
     margin-top: 10px;
     margin-bottom: 10px;
     font-style: normal;
-    font-weight: 700;
+    line-height: 34px;
+    font-weight: bold;
 
 }
 .right{
@@ -56,7 +57,6 @@ body{
 }
 .slogan{
     margin: 0 auto;
-    width:1200px;
     position: absolute;
     top: 139px;
     
@@ -100,13 +100,14 @@ body{
     font-size: 20px;
     border-radius: 5px 0px 0px 5px;
     border: none;
+    padding: 0.5rem;
 }
 .search_icon{
-    margin-left: 15px;
-    margin-top: 8px;
+
+    margin: 8px;
 }
 #content{
-    width: 1200px;
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -114,7 +115,7 @@ body{
 }
 
 div[id^=attraction_content] {
-    /* width: 270px; */
+    
     margin: 15px;
     position: relative;
 }
@@ -134,7 +135,7 @@ p{
     font-weight: 700;
 } 
 #main_photo{
-    width: 270px;
+    width: 268px;
     height: 197px;
     vertical-align: top;
     border-radius: 5px 5px 0 0;
@@ -185,6 +186,7 @@ footer{
     border-radius: 5px;
     box-shadow: 0px 0px 20px #aabbcc;
     opacity: 0;
+    z-index: 999;
 }
 .category_Div{
     position: relative;
@@ -242,7 +244,60 @@ h1{
         width: 90%;
         flex-wrap: wrap;
         grid-template-columns: 1fr ;
+    }
+   
+} 
+@media(max-width:360px){
+    #content{
+        width: 321px;
+        flex-wrap: wrap;
+        grid-template-columns: 1fr ;
+    }
+    #main_photo{
+        height: 235px;
+        vertical-align: top;
+        border-radius: 5px 5px 0 0;
+        border: 1px solid #e8e8e8;
+        margin-bottom: -2px;
+    }
+    div[id^=attraction_content] {
+        margin: 0 auto;
+        margin: 15px;
+        position: relative;
+    }
+    .search-bar{
+        width:230px;
         
+    }
+    .slogan{
+        width: 321px;
+        
+    }
+    .search{
+        width:230px;
+        
+    }
+    #search_category{
+        background-color: #FFFFFF;
+        width: 322px;
+        height: 162px;
+        position: absolute;
+        margin-left: 10px;
+        top: 76px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        border-radius: 5px;
+        box-shadow: 0px 0px 20px #aabbcc;
+        opacity: 0;
+    }
+    .search_category_content{
+        width: 66px;
+        height: 20px;
+        margin-left: 15px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 15px;
+    
     }
 } 
 

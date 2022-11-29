@@ -68,7 +68,7 @@ def api_attraction():
                 # print(photo)
                 # print(photo[0])
                 photo_str = photo[0].split(',')
-             
+                print(photo_str)
                 attraction_list={
                     "id":id ,
                     "name":name,
@@ -219,4 +219,4 @@ def categories():
         return json_result,500
 
 
-app.run(host="0.0.0.0",port=3000)
+app.run(host="0.0.0.0",port=3000,debug=True)
