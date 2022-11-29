@@ -245,6 +245,10 @@ h1{
         flex-wrap: wrap;
         grid-template-columns: 1fr ;
     }
+    .search-bar{
+        width:280px;
+        
+    }
    
 } 
 @media(max-width:360px){
