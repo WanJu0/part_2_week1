@@ -48,7 +48,7 @@ def api_attraction():
             # 模糊比對景點名稱或分類完全比對
             mycursor.execute("SELECT * FROM attraction WHERE category=%s or name LIKE %s LIMIT %s ,%s",(keyword ,"%"+keyword+"%", page*12, 12))
             result = mycursor.fetchall()
-            print(result)
+            # print(result)
         if result != None:
             data_value=[]
             for i in range(0,len(result)):
@@ -63,9 +63,12 @@ def api_attraction():
                 lng = result[i][8]
                 # print(lng)
                 # 圖片處理
-                mycursor.execute("SELECT group_concat(photo) FROM attraction INNER JOIN photo ON attraction.id=photo.photo_id WHERE attraction.id=%s group by photo.photo_id" ,(i,))
+                mycursor.execute("SELECT group_concat(photo) FROM attraction INNER JOIN photo ON attraction.id=photo.photo_id WHERE attraction.id=%s group by photo.photo_id" ,(id,))
                 photo = mycursor.fetchone()
-             
+                # print(photo)
+                # print(photo[0])
+                photo_str = photo[0].split(',')
+                print(photo_str)
                 attraction_list={
                     "id":id ,
                     "name":name,
@@ -76,7 +79,7 @@ def api_attraction():
                     "mrt":mrt,
                     "lat":lat,
                     "lng":lng,
-                    "images":photo
+                    "images":photo_str
                 }
                 data_value.append(attraction_list)	
                 if len(result)<12:
@@ -119,7 +122,7 @@ def attraction_ID(attractionID):
     try:
         mycursor.execute("SELECT * FROM attraction WHERE id=%s",(attractionID,))
         result = mycursor.fetchone()
-        print(type(result))
+        # print(type(result))
         if result != None:
             id= result[0]
             name = result[1]
@@ -132,8 +135,11 @@ def attraction_ID(attractionID):
             lng = result[8]
             
             # 圖片處理
-            mycursor.execute("SELECT GROUP_CONCAT(photo) FROM attraction INNER JOIN photo ON attraction.id=photo.photo_id WHERE attraction.id=%s GROUP BY photo.photo_id" ,(attractionID,))
+            mycursor.execute("SELECT GROUP_CONCAT(CONCAT(photo)) FROM attraction INNER JOIN photo ON attraction.id=photo.photo_id WHERE attraction.id=%s GROUP BY photo.photo_id" ,(attractionID,))
             photo = mycursor.fetchone()
+            # print(photo[0])
+            photo_str = photo[0].split(',')
+            # print(photo_str)
            
             attraction_list={
                 "id":id ,
@@ -145,7 +151,7 @@ def attraction_ID(attractionID):
                 "mrt":mrt,
                 "lat":lat,
                 "lng":lng,
-                "images":photo
+                "images":photo_str
             }
             
             data={
@@ -153,7 +159,7 @@ def attraction_ID(attractionID):
             }
 			
             json_result=jsonify(data)
-            print(json_result)
+            # print(json_result)
             mycursor.close()
             connection_object.close()
             return json_result
@@ -190,14 +196,14 @@ def categories():
             category=list(result[x])
             categories_list=category[0]
             category_result.append(categories_list)
-            print(type(category[0]))
-        print(category_result)
+        #     print(type(category[0]))
+        # print(category_result)
         
         data={
             "data":category_result
         }
         json_result=jsonify(data)
-        print(json_result)
+        # print(json_result)
         mycursor.close()
         connection_object.close()
         return json_result
@@ -213,4 +219,4 @@ def categories():
         return json_result,500
 
 
-app.run(host="0.0.0.0",port=3000)
+app.run(host="0.0.0.0",port=3000,debug=True)
