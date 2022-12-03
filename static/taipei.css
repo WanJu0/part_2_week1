@@ -432,11 +432,19 @@ a{
     accent-color: #448899;
     width: 22px;
     height: 22px;
+    margin-left: 18px;
+    margin-right: 4px;
+}
+#select_time{
+    align-items: center;
+    display: flex;
 }
 #daytime{
     accent-color: #448899;
     width: 22px;
     height: 22px;
+    margin-right: 4px;
+    margin-left: 10px;
 
 }
 /* .dot{
@@ -520,6 +528,12 @@ a{
     }
     #photo_list{
         width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        
+    }
+    #navigation_bar{
+        margin-left: 10px;
     }
 }
 
