@@ -209,6 +209,276 @@ h1{
     bottom: 45px;
     padding: 10px;
 }
+/* attraction css */
+#Attraction_content{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    border-bottom: 1px solid #E8E8E8;
+   
+}
+#photo_list{
+    background-color: #b5ddba;
+    width: 540px;
+    height: 406px;
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 37px;
+}
+#photo_information{
+    
+    width: 600px;
+    height: 406px;
+    margin: 15px;
+}
+#navigation_Div{
+    max-width: 1920px;
+    border: 1px solid #E8E8E8;
+
+
+}
+#attraction_div{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+#Attraction_information{
+
+    margin: 0 auto;
+    left: 360px;
+    top: 574px;
+    margin-top: 50px;
+}
+#attraction_description{
+    margin: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666666;
+}
+a{
+	text-decoration: none;
+}
+#address{
+
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+#address_name{
+    height: 24px;
+    color: #666666;
+}
+#address_title{
+    margin-top: 20px;
+    margin-bottom: 3px;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    color: #666666;
+}
+#transport{
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#transport_content{
+    color: #666666;
+    margin-bottom: 120px;
+}
+#transport_title{
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    /* line-height: 13px; */
+    padding-bottom: 3px;
+    color: #666666;
+
+}
+#info_content{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#journey_title{
+    margin-bottom: 15px;
+    font-size: 24px;
+    line-height: 24px;
+    font-weight: 700;
+    color: #666666;
+    padding-top: 20px;
+}
+#journey_search{
+    margin-bottom: 41px;
+    padding-top: 25px;
+    margin-left: 20px;
+    
+
+}
+#journey-btn{
+    width: 154px;
+    height: 36px;
+    background: #448899;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+    border: #448899;
+}
+#journey_category{
+    font-size: 16px;
+    line-height: 13.3px;
+    font-weight: 500;
+    color: #666666;
+    margin-bottom: 20px;
+}
+#journey_content{
+    background: #E8E8E8;
+    border-radius: 5px;
+    height: 302px;
+}
+#journey_date{
+    margin-left: 20px;
+    color: #666666;
+    margin-top: 15px;
+    font-weight: 700;
+}
+#journey_time{
+    margin-left: 20px;
+    color: #666666;
+    margin-top: 15px;
+    font-weight: 700;
+}
+#journey_cost{
+    margin-left: 20px;
+    color: #666666;
+    margin-top: 15px;
+    display: flex;
+    font-weight: 700;
+}
+.schedule{
+    margin-left: 20px;
+    color: #666666;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.schedule_content{
+    margin-top: 15px;
+    margin-left: 20px;
+    margin-bottom: 15px;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    color: #666666;
+    
+}
+#date{
+    margin-left: 5px;
+    width: 193px;
+    height: 35px;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-family: "Noto Sans TC";
+    border: none;
+}
+#daytime_cost{
+    
+    display: none;
+}
+#nighttime_cost{
+   
+    display: none;
+}
+.photo_list_content{
+    width: 100%;
+    max-width: 100%;
+    height: 406px;
+    object-fit: cover;
+    
+    
+}
+.btn_left{
+    position: absolute;
+    top: 175px;
+    z-index: 999;
+    background-color: #f0f8ff00;
+    border: none;
+}
+.btn_right{
+    position: absolute;
+    right: 0;
+    top: 175px;
+    z-index: 999;
+    background-color: #f0f8ff00;
+    border: none;
+}
+#photo_list{
+    position: relative;
+    /* display:none; */
+    overflow: hidden;
+}
+#nighttime{
+    accent-color: #448899;
+    width: 22px;
+    height: 22px;
+}
+#daytime{
+    accent-color: #448899;
+    width: 22px;
+    height: 22px;
+
+}
+/* .dot{
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 6px;
+
+    border-radius: 50%;
+    display: inline-block;
+} */
+
+/* .white{
+    width: 10px;
+    height: 10px;
+    background-color: silver;
+    border-radius: 50%;
+    cursor: pointer;
+} */
+#dot_content{
+    position: absolute;
+    bottom: 13px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 6px;
+    background-color: white;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+
+.active, .dot:hover {
+background-color: black;
+}
  @media(max-width:1200px){
     
     #navigation_bar{
@@ -237,6 +507,18 @@ h1{
         position: relative;
     }
    
+}
+@media(max-width:800px){
+    #Attraction_content{
+        display: flex;
+        flex-wrap:wrap;
+    }
+    #photo_information{
+        width: 100%;
+    }
+    #photo_list{
+        width: 100%;
+    }
 }
 
 @media(max-width:600px){
@@ -278,6 +560,10 @@ h1{
         margin-bottom: 10px;
         margin-right: 15px;
     
+    }
+    #Attraction_content{
+        display: flex;
+        flex-wrap:wrap;
     }
    
 } 

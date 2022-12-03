@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台北一日遊</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='taipei.css') }}" />
+    
+</head>
+<body>
+    <div id="navigation_Div">
+        <div id="navigation_bar">
+            <div class="left">台北一日遊</div>
+            <div class="right">
+                <div class="item">預定行程</div>
+                <div class="item">登入/註冊</div>
+            </div>
+        </div>  
+    </div>  
+    <div id="attraction_div">
+        <div id="Attraction_content">
+            <div id="photo_list">
+                <!-- <img class="icon_left" src="/static/btn_leftArrowbutton.png" width="28" height="28"/> -->
+                <button class="btn_left" onclick="plusDivs(-1)" src="/static/btn_leftArrowbutton.png">
+                    <img class="icon_left" src="/static/btn_leftArrowbutton.png" width="36" height="36"/>
+                </button>
+                <button class="btn_right" onclick="plusDivs(1)" src="/static/btn_leftArrowbutton.png">
+                    <img class="icon_right" src="/static/btn_rightArrowbutton.png" width="36" height="36"/>
+                </button>
+
+                <div id="dot_content"></div>
+                
+                
+            </div>
+            
+            <div id="photo_information">
+                <div id="photo_title">
+                    <div id="photo_name"></div>
+                </div>
+                <div id="journey">
+                    <div id="journey_title"></div>
+                    <div id="journey_category"></div>
+                    <div id="journey_content">
+                        <div class="schedule">訂購導覽行程</div>
+                        <div class="schedule_content">以此景點為中心的一日行程，帶您探索城市角落故事</div>
+                        <div id="journey_date">
+                            <div>選擇日期 : <input type="date" name="date" id="date" /></div>
+                        </div>
+                        <div id="journey_time">
+                            <div>選擇時間 :
+                                <input type="radio" onclick="daynightCheck();" id="daytime" name="cost" value="daytime">
+                                <label for="contactChoice1">上半天</label>
+                                <input type="radio" onclick="daynightCheck();" id="nighttime" name="cost" value="nighrtime">
+                                <label for="contactChoice1">下半天</label>
+                            </div>
+                        </div> 
+                        <div id="journey_cost">
+                            <div>導覽費用 : 
+                                <!-- <div id="daytime_cost">新台幣2000元</div>
+                                <div id="nighttime_cost">新台幣2500元</div> -->
+                            </div>
+                            <div id="daytime_cost">新台幣2000元</div>
+                            <div id="nighttime_cost">新台幣2500元</div>
+                        </div>
+
+                        <div id="journey_search">
+                            
+                            <button onclick=" " type="button" class="journey-btn" id="journey-btn"  >開始預約行程</button>
+                        </div>
+                    </div>
+
+                </div>
+                
+
+            </div>
+
+        </div>
+        <div id="Attraction_information">
+            <div id="info_content"></div>
+            <div id="attraction_description"></div>
+            <div id="address">
+                <div id="address_title">景點地址</div>
+                <div id="address_name"></div>
+            </div>
+            <div id="transport">
+                <div id="transport_title">交通方式</div>
+                <div id="transport_content"></div>
+
+            </div>
+
+        </div>
+    </div> 
+
+    <div class="footer_container">
+        <footer>COPYRIGHT © 2022 台北一日遊</footer>    
+    </div>
+    <script>
+        
+    function attractionID()
+    {
+        let s = location.href;
+        let path = location.pathname;
+        console.log(s);
+        console.log(path);
+        // 這邊是將頁面抓到輸入的字串
+        fetch(`/api/${path}`, {})
+        .then((response) => {
+            // 這裡會得到一個 ReadableStream 的物件
+            // 可以透過 blob(), json(), text() 轉成可用的資訊
+            return response.json(); 
+        }).then((jsonData) => {
+            let title = jsonData.data.name;
+            let category = jsonData.data.category;
+            let mrt = jsonData.data.mrt;
+            let description = jsonData.data.description;
+            let address= jsonData.data.address;
+            let transport= jsonData.data.transport;
+            let images= jsonData.data.images;
+            console.log(description);
+            console.log(address);
+            console.log(transport);
+            console.log(images);
+            // 有幾張圖片
+            console.log(images.length);
+           
+            // 將景點名稱放進去
+            let journeyCategory=document.getElementById("journey_category"); 
+            categoryNode = document.createTextNode(category+" at "+mrt);
+            journeyCategory.appendChild(categoryNode);
+
+            // 將放進去
+            let journeyTitle=document.getElementById("journey_title"); 
+            titleNode = document.createTextNode(title);
+            journeyTitle.appendChild(titleNode);
+           
+            // 將景點介紹放進去
+            let informationContent=document.getElementById("attraction_description"); 
+            informationNode = document.createTextNode(jsonData.data.description);
+            informationContent.appendChild(informationNode);
+            // 將景點地址放進去
+            let addressContent=document.getElementById("address_name"); 
+            addressNode = document.createTextNode(jsonData.data.address);
+            addressContent.appendChild(addressNode);
+
+            // 將交通資訊放進去
+            let transportContent=document.getElementById("transport_content"); 
+            transportNode = document.createTextNode(transport);
+            transportContent.appendChild(transportNode);
+
+            // 將圖片放進phot_list
+            for(let i=0; i<images.length; i++){
+                let photo_content=document.getElementById("photo_list");
+                let photo_img = document.createElement("img");
+                photo_img.className="photo_list_content";
+                photo_img.src = images[i];
+                photo_content.appendChild(photo_img);
+
+                let dot_content=document.getElementById("dot_content");
+                let dots = document.createElement("span");
+                dots.className  = "dot";
+                dots.setAttribute("onclick", `currentSlide(${i+1})`)
+                dot_content.appendChild(dots);
+
+            
+
+               
+
+            }
+
+        })
+        
+    }
+    attractionID();
+
+    function daynightCheck() {
+        if (document.getElementById("daytime").checked) {
+           document.getElementById("daytime_cost").style.display ="block";
+        } else {
+           document.getElementById("daytime_cost").style.display = 'none';
+        }
+        if (document.getElementById("nighttime").checked) {
+           document.getElementById("nighttime_cost").style.display ="block";
+        } else {
+           document.getElementById("nighttime_cost").style.display = "none";
+        }
+    }
+
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    // Next/previous controls
+    function plusDivs(n) {
+    showSlides(slideIndex += n);
+    }
+
+    // Thumbnail image controls
+    function currentSlide(n) {
+    showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+    let i;
+    let slides = document.querySelectorAll(".photo_list_content");
+    let dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
+    }
+
+
+    
+    </script>
+</body>
+</html>
