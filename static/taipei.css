@@ -466,8 +466,8 @@ a{
 }
 .dot {
     cursor: pointer;
-    height: 15px;
-    width: 15px;
+    height: 12px;
+    width: 12px;
     margin: 0 6px;
     background-color: white;
     border-radius: 50%;
@@ -477,8 +477,10 @@ a{
 
 
 .active, .dot:hover {
-background-color: black;
+    background-color: black;
+    border: 2px solid #ffffff;  
 }
+
  @media(max-width:1200px){
     
     #navigation_bar{
