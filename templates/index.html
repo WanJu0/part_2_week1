@@ -61,15 +61,28 @@
             let mrt = jsonData.data[0].mrt;
             let category = jsonData.data[0].category;
             let image = jsonData.data[0].images[0];
+            let id = jsonData.data[0].id;
+            console.log(id);
+
             
             for (let i=0; i<jsonData.data.length; i++)
             {
                 console.log("test2")
+                // 新增一個連結在最外層
+
+
                 // 建立attractionDiv 容器 並放入一開始在html建立的content
                 let content=document.getElementById("content");
+                // 新增一個連結在最外層
+                let attractionLink = document.createElement("a");
+                attractionLink.id = `attraction_link ${i}`;
+                attractionLink.href=`/attraction/${jsonData.data[i].id}`;
+                content.appendChild(attractionLink);
+
+
                 let attractionDiv = document.createElement("div");
                 attractionDiv.id = `attraction_content ${i}`;
-                content.appendChild(attractionDiv);
+                attractionLink.appendChild(attractionDiv);
 
 
                 // 建立圖片的容器並放在attractionDiv 容器中
@@ -90,7 +103,6 @@
                 // 先把節點放進div中 
                 textName.appendChild(nameNode);
                 attractionName.appendChild(textName);
-                
                 attraction_content.appendChild(attractionName);
                 
                 // 先建立information資訊 待會放mrt 和分類
@@ -318,9 +330,15 @@
                     
                     // 建立attractionDiv 容器 並放入一開始在html建立的content
                     let content=document.getElementById("content");
+                    // 新增一個連結在最外層
+                    let attractionLink = document.createElement("a");
+                    attractionLink.id = `attraction_link ${i+12*nextPage}`;
+                    attractionLink.href=`/attraction/${jsonData.data[i].id}`;
+                    content.appendChild(attractionLink);
+
                     let attractionDiv = document.createElement("div");
                     attractionDiv.id = `attraction_content ${i+12*nextPage}`;
-                    content.appendChild(attractionDiv);
+                    attractionLink.appendChild(attractionDiv);
 
 
                     // 建立圖片的容器並放在attractionDiv 容器中
