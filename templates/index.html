@@ -7,13 +7,65 @@
     <title>台北一日遊</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='taipei.css') }}" />
 </head>
-<body>
+<body> 
+    <div class="overlay_login" id="overlay_login">
+        <div id="login_content">
+            <div id="decorator_section">
+                <div id="decorator_top"></div>
+                <div id="decorator_down">
+                    <div id="decorator_main">
+                        <div id="login_title">
+                            <div id="login_nane">登入會員帳號</div>
+                            <img onclick="closeLogin()" class="x_icon" src="/static/icon_closex.png" />
+                        </div>
+                    
+                        <input id="input_email"type="text" name="email" placeholder="輸入電子信箱"/><br/>
+                        <input id="input_password" type="password" name="password" placeholder="輸入密碼"/><br/>
+                        <button onclick="apiSingin()" id="login_btn">登入帳戶</button>
+                        <div id="signin_message"></div>
+                        <div onclick="openSignup(),closeLogin() " id="no_account">還沒有帳戶?點此註冊</div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="overlay_signup" id="overlay_signup">
+        <div id="signup_content">
+            <div id="signup_section">
+                <div id="signup_top"></div>
+                <div id="signup_down">
+                    <div id="signup_main">
+                        <div id="signup_title">
+                            <div id="signup_nane">註冊會員帳號</div>
+                            <img onclick="closeSignup()" class="signup_icon" src="/static/icon_closex.png" />
+                        </div>
+                        <!-- <form action="/api/user" method="POST"> -->
+                        <input id="input_signup_name" type="text" name="name" placeholder="輸入姓名"/><br/>
+                        <input id="input_signup_email"type="text" name="email" placeholder="輸入電子信箱"/><br/>
+                        <input id="input_signup_password" type="password" name="password" placeholder="輸入密碼"/><br/>
+                        <button onclick="apiSingup()"id="signup_btn">註冊帳戶</button>
+                        <div id="signup_message"></div>
+                        <div onclick="closeSignup(),openLogin()"  id="account">已經有帳戶?點此登入</div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </div>
     <div id="navigation_bar">
         <div class=left>台北一日遊</div>
-        <div class=right>
+        <div class=right_login>
             <div class="item">預定行程</div>
-            <div class="item">登入/註冊</div>
+            <div id="login_logout">
+                <div class="signin_btn" onclick="openLogin()">登入/註冊</div>
+            </div>
         </div>
+        <div class=right_logout>
+            <div class="item">預定行程</div>
+            <div id="login_logout">
+                <div class="signout_btn" onclick="logout()" >登出系統</div>
+            </div>
+        </div>
+        
         <div class=slogan>
 
             <div class=slogan_top>輕鬆享受台北一日悠閒</div>
@@ -396,21 +448,168 @@
                 console.log("不重疊")
             }
         } 
-                    
-     
-          
     }
     
     
     Attraction();
-
     apiCategory();
-    
-  
+    // 追蹤footer
     let observer = new IntersectionObserver(callback, options)
     const cards = document.querySelector("footer");
-    // observer.observe(cards);   
-    
+
+    // 點擊或關閉註冊和登入div
+    function openLogin() {
+        let element = document.getElementById("overlay_login")
+        element.style.display = "block"
+    }
+    function closeLogin() {
+        let element = document.getElementById("overlay_login")
+        element.style.display = "none"
+    } 
+    // 開關註冊
+    function openSignup() {
+        let element = document.getElementById("overlay_signup")
+        element.style.display = "block"
+    }
+    function closeSignup() {
+        let element = document.getElementById("overlay_signup")
+        element.style.display = "none"
+    } 
+    // 註冊系統
+    function apiSingup(){
+        const nameElement = document.getElementById("input_signup_name");
+        const name = nameElement.value;
+        const emailElement = document.getElementById("input_signup_email");
+        const email = emailElement.value;
+        const passwordElement = document.getElementById("input_signup_password");
+        const password = passwordElement.value;
+
+        console.log(name);
+        console.log(email);
+        console.log(password);
+        let data=
+            {
+                name:name,
+                email:email,
+                password:password
+            };
+        fetch("/api/user",{
+            method: "POST" ,
+            credentials: "include",
+            body:JSON.stringify(data),
+            cache:"no-cache",
+            headers:new Headers({
+                "content-type":"application/json"
+            })
+        })
+        .then((response) => {
+            // 這裡會得到一個 ReadableStream 的物件
+            // 可以透過 blob(), json(), text() 轉成可用的資訊
+            return response.json(); 
+        }).then((jsonData) => {
+            console.log(jsonData,"check 33")
+            console.log(jsonData.message)
+            if(jsonData.error==true){
+                document.getElementById("signup_message").innerHTML = jsonData.message 
+            }
+            if(jsonData.ok==true){
+                document.getElementById("signup_message").innerHTML = "註冊成功" 
+            }
+        })
+    }
+    // 登入系統的js 
+    function apiSingin()
+    {
+        const emailElement = document.getElementById("input_email");
+        const email = emailElement.value;
+        const passwordElement = document.getElementById("input_password");
+        const password = passwordElement.value;
+
+        console.log(email);
+        console.log(password);
+        let data=
+            {
+                email:email,
+                password:password
+            };
+        
+        console.log(data);
+        fetch("/api/user/auth",{
+            method: "PUT" ,
+            credentials: "include",
+            body:JSON.stringify(data),
+            cache:"no-cache",
+            headers:new Headers({
+                "content-type":"application/json"
+            })
+        })
+        .then(function(response){
+            if(response.status ==400){
+                console.log(`Response status was not 200:${response.status}`);
+                console.log(data)
+                document.getElementById("signin_message").innerHTML = "帳號密碼有誤"
+                return ;
+            }
+            if(response.status ==200){
+                response.json().then(function(data){
+                    console.log(data)
+                    // document.getElementById("signin_message").innerHTML = "登入成功"
+                    window.location.replace(location.href)
+                })
+            }
+
+        })
+        
+    }
+    // 寫一個函式可以判斷使用者是否有登入
+    function check()
+    {
+        fetch("/api/user/auth",{
+            method: "GET" ,
+        })
+        .then((response) => {
+            // 這裡會得到一個 ReadableStream 的物件
+            // 可以透過 blob(), json(), text() 轉成可用的資訊
+            return response.json(); 
+        }).then((jsonData) => {
+            console.log(jsonData,"check 1")
+            console.log(jsonData.data)
+            if(jsonData.data!=false){
+                let element = document.querySelector(".right_login")
+                element.style.display="none"
+                let signoutElement = document.querySelector(".right_logout")
+                signoutElement.style.display="block"
+                signoutElement.style.display="flex"
+            }
+            else{
+                let element = document.querySelector(".right_login")
+                element.style.display="block"
+                element.style.display="flex"
+                let signoutElement = document.querySelector(".right_logout")
+                signoutElement.style.display="none"
+               
+            }
+            
+        })
+    }
+    check()
+    // 登出系統
+    function logout()
+    {
+        fetch("/api/user/auth",{
+            method: "DELETE" ,
+        })
+        .then((response) => {
+            // 這裡會得到一個 ReadableStream 的物件
+            // 可以透過 blob(), json(), text() 轉成可用的資訊
+            return response.json(); 
+        }).then((jsonData) => {
+            console.log(jsonData,"check 2")
+            window.location.replace(location.href)
+            
+        })
+    }
+
     </script>
 </body>
 </html>
