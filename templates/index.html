@@ -52,7 +52,10 @@
         </div>  
     </div>
     <div id="navigation_bar">
-        <div class=left>台北一日遊</div>
+        <a href="/">
+            <div class=left>台北一日遊</div>
+        </a>
+        
         <div class=right_login>
             <div class="item">預定行程</div>
             <div id="login_logout">
@@ -510,10 +513,12 @@
             console.log(jsonData,"check 33")
             console.log(jsonData.message)
             if(jsonData.error==true){
-                document.getElementById("signup_message").innerHTML = jsonData.message 
+                document.getElementById("signup_message").innerHTML = jsonData.message ;
             }
             if(jsonData.ok==true){
-                document.getElementById("signup_message").innerHTML = "註冊成功" 
+                document.getElementById("signup_message").innerHTML = "註冊成功" ;
+                document.getElementById("login_btn").style.margin="0px";
+
             }
         })
     }

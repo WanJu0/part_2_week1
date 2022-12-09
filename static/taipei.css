@@ -580,7 +580,7 @@ a{
     text-align: center;
     color: #FFFFFF;
     text-align: center;
-    margin: 2px;
+    margin-bottom: 10px;
 }
 #no_account{
     color: #666666;
@@ -592,6 +592,7 @@ a{
     line-height: 13px;
     align-items: center;
     text-align: center;
+    padding: 5px;
 }
 .x_icon{
     position: absolute;
@@ -689,6 +690,7 @@ a{
     align-items: center;
     text-align: center;
     color: #FFFFFF;
+    margin-bottom: 5px;
 
 }
 #account{
@@ -708,6 +710,8 @@ a{
 #signin_message{
     text-align: center;
     color: red;
+    margin-top: -6px;
+   
 }
 #login_logout{
     display: flex;
@@ -734,6 +738,7 @@ a{
     line-height: 13px;
     cursor: pointer;
     /* z-index: 999; */
+   
 }
 .right_logout{
     display: none;
@@ -742,6 +747,8 @@ a{
     text-align: center;
     margin: 2px;
     color: yellowgreen;
+    margin-top: -6px;
+    
 }
 #overlay_login{
     background-color: rgba(0, 0, 0, 0.25);
