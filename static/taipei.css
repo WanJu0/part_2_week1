@@ -21,13 +21,22 @@ body{
     font-style: normal;
     line-height: 34px;
     font-weight: bold;
+    padding-left: 10px;
 
 }
-.right{
+.right_login{
     display: flex;
     justify-content: flex-end;
     font-size: 16px;
     flex: auto;
+    
+}
+.right_logout{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 16px;
+    flex: auto;
+    
     
 }
 .item{
@@ -38,6 +47,7 @@ body{
     font-weight: 500;
     font-size: 16px;
     line-height: 13px;
+    cursor: pointer;
 }
 
 #welcome{
@@ -411,7 +421,7 @@ a{
 .btn_left{
     position: absolute;
     top: 175px;
-    z-index: 999;
+    z-index: 700;
     background-color: #f0f8ff00;
     border: none;
 }
@@ -419,7 +429,7 @@ a{
     position: absolute;
     right: 0;
     top: 175px;
-    z-index: 999;
+    z-index: 700;
     background-color: #f0f8ff00;
     border: none;
 }
@@ -488,7 +498,284 @@ a{
     background-color: black;
     border: 2px solid #ffffff;  
 }
+/* 會員登入的css */
+#login_content{
+    width: 340px;
+    height: 275px;
+    position: absolute;
+    left: 50%;
+    margin-top: 80px;
+    transform: translate(-50%, -10px);
+    z-index: 800;
 
+}
+#decorator_top{
+    width: 340px;
+    height: 10px;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-radius: 6px 6px 0 0;
+}
+#decorator_down{
+    width: 340px;
+    height: 265px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    border-radius: 0px 0px 6px 6px;
+}
+#decorator_main{
+    width: 310px;
+    height: 235px;
+    padding: 15px;
+}
+#login_title{
+    height: 27px;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    align-items: center;
+    text-align: center;
+    color: #666666;
+    justify-content: flex-end;
+    display: flex;
+}
+#login_nane{
+    width: 310px
+}
+#input_email{
+    box-sizing: border-box;
+    width: 310px;
+    height: 47px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding: 15px;
+}
+#input_password{
+    box-sizing: border-box;
+    width: 310px;
+    height: 47px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 15px;
+   
+}
+#login_btn{
+    width: 310px;
+    height: 47px;
+    background: #448899;
+    border-radius: 5px;
+    border: none;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 10px;
+}
+#no_account{
+    color: #666666;
+    cursor: pointer;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+}
+.x_icon{
+    position: absolute;
+    cursor: pointer;
+}
+/* 會員註冊 */
+#signup_content{
+    width: 340px;
+    height: 332px;
+    position: absolute;
+    left: 50%;
+    margin-top: 80px;
+    transform: translate(-50%, -10px);
+    z-index: 800;
+
+}
+#signup_top{
+    width: 340px;
+    height: 10px;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-radius: 6px 6px 0 0;
+}
+#signup_down{
+    width: 340px;
+    height: 322px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    border-radius: 0px 0px 6px 6px;
+}
+#signup_main{
+    width: 310px;
+    height: 235px;
+    padding: 15px;
+}
+#signup_title{
+    height: 27px;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    align-items: center;
+    text-align: center;
+    color: #666666;
+    justify-content: flex-end;
+    display: flex;
+}
+#signup_nane{
+    width: 310px
+}
+#input_signup_email{
+    box-sizing: border-box;
+    width: 310px;
+    height: 47px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding: 15px;
+
+}
+#input_signup_password{
+    box-sizing: border-box;
+    width: 310px;
+    height: 47px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 15px;
+   
+}
+#input_signup_name{
+    box-sizing: border-box;
+    width: 310px;
+    height: 47px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 15px;
+}
+#signup_btn{
+    width: 310px;
+    height: 47px;
+    background: #448899;
+    border-radius: 5px;
+    border: none;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    margin-bottom: 5px;
+
+}
+#account{
+    color: #666666;
+    cursor: pointer;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    align-items: center;
+    text-align: center;
+}
+#signup_icon{
+    position: absolute;
+}
+#signin_message{
+    text-align: center;
+    color: red;
+    margin-top: -6px;
+   
+}
+#login_logout{
+    display: flex;
+}
+.signout_btn {
+    
+    height: 34px;
+    align-items: center;
+    display: flex;
+    margin: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    cursor: pointer;
+   
+
+}
+.signin_btn{
+    align-items: center;
+    display: flex;
+    margin: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    cursor: pointer;
+    /* z-index: 999; */
+   
+}
+.right_logout{
+    display: none;
+}
+#signup_message{
+    text-align: center;
+    margin: 2px;
+    color: yellowgreen;
+    margin-top: -6px;
+    
+}
+#overlay_login{
+    background-color: rgba(0, 0, 0, 0.25);
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    display: none;
+    justify-items: center;
+    z-index: 900;
+    display: flex;
+    height: 100vh;
+    display: none;
+}
+#overlay_signup{
+    background-color: rgba(0, 0, 0, 0.25);
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    display: none;
+    justify-items: center;
+    z-index: 900;
+    display: flex;
+    height: 100vh;
+    display: none;
+}
  @media(max-width:1200px){
     
     #navigation_bar{
@@ -518,6 +805,7 @@ a{
     }
    
 }
+
 @media(max-width:800px){
     #Attraction_content{
         display: flex;

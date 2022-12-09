@@ -47,6 +47,32 @@ INSERT INTO `attraction` VALUES (1,'新北投溫泉區','養生溫泉','北投�
 UNLOCK TABLES;
 
 --
+-- Table structure for table `member`
+--
+
+DROP TABLE IF EXISTS `member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `member` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member`
+--
+
+LOCK TABLES `member` WRITE;
+/*!40000 ALTER TABLE `member` DISABLE KEYS */;
+INSERT INTO `member` VALUES (1,'彭彭彭','ply@ply.com','12345678'),(2,'lucy','lucy@lucy.com','lucy123'),(3,'jay','jay@jay.com','jay123'),(4,'test','test@test.com','test123'),(5,'test2','test2@test.com','test2123'),(6,'david','david@david.com','david123'),(7,'lin','lin@lin.com','lin123'),(8,'kenny','kenny@kenny.com','kenny'),(9,'kitty','kitty@kitty.com','kitty'),(10,'kitty2','kitty2@kitty.com','kitty'),(11,'jakie','jakie@jakie.com','jakie'),(12,'jj','jj@jj.com','jj123'),(13,'ken123','ken123@ken.com','ken123'),(14,'will','will@will.com','will'),(15,'ken2','ken2@ken2.com','ken2'),(16,'chen','chen@chen.com','chen');
+/*!40000 ALTER TABLE `member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `photo`
 --
 
@@ -80,4 +106,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-18 11:50:49
+-- Dump completed on 2022-12-09  0:15:19
