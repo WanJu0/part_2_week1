@@ -58,7 +58,7 @@ body{
 }
 .welcome_photo{
     margin: 0 auto;
-    background: url(/static/welcome.png) no-repeat;
+    background: url(/static/images/welcome.png) no-repeat;
     height: 320px;
     background-size: cover;
     width: 1920px;
@@ -95,6 +95,7 @@ body{
     width: 60px;
     border-radius: 0px 5px 5px 0px;
     border: none;
+    cursor: pointer;
 }
 .search{
     display: flex;
@@ -457,23 +458,7 @@ a{
     margin-left: 10px;
 
 }
-/* .dot{
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 6px;
 
-    border-radius: 50%;
-    display: inline-block;
-} */
-
-/* .white{
-    width: 10px;
-    height: 10px;
-    background-color: silver;
-    border-radius: 50%;
-    cursor: pointer;
-} */
 #dot_content{
     position: absolute;
     bottom: 13px;
@@ -726,8 +711,6 @@ a{
     font-size: 16px;
     line-height: 13px;
     cursor: pointer;
-   
-
 }
 .signin_btn{
     align-items: center;
@@ -737,8 +720,6 @@ a{
     font-size: 16px;
     line-height: 13px;
     cursor: pointer;
-    /* z-index: 999; */
-   
 }
 .right_logout{
     display: none;

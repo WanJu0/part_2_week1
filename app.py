@@ -198,8 +198,6 @@ def categories():
             category=list(result[x])
             categories_list=category[0]
             category_result.append(categories_list)
-        #     print(type(category[0]))
-        # print(category_result)
         
         data={
             "data":category_result
