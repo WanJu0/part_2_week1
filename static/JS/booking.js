@@ -49,7 +49,9 @@ fetch("/api/booking", {})
             for(var i = 0; i < bookingLine.length; i++){
                 bookingLine[i].style.border="none";
             }
-
+            const bookingPrice = document.getElementById("all_reservation")
+            bookingPrice.style.display = "none"
+          
         }
         let attractionName = jsonData.data;
         for (let i=0; i<jsonData.data.length; i++)
