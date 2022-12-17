@@ -2,8 +2,7 @@ function attractionID()
 {
     let s = location.href;
     let path = location.pathname;
-    console.log(s);
-    console.log(path);
+
     // 這邊是將頁面抓到輸入的字串
     fetch(`/api/${path}`, {})
     .then((response) => {
@@ -18,13 +17,7 @@ function attractionID()
         let address= jsonData.data.address;
         let transport= jsonData.data.transport;
         let images= jsonData.data.images;
-        console.log(description);
-        console.log(address);
-        console.log(transport);
-        console.log(images);
-        // 有幾張圖片
-        console.log(images.length);
-        
+    
         // 將景點名稱放進去
         let journeyCategory=document.getElementById("journey_category"); 
         categoryNode = document.createTextNode(category+" at "+mrt);
@@ -66,157 +59,6 @@ function attractionID()
     })
 }
 attractionID();
-
-// 點擊或關閉註冊和登入div
-function openLogin() {
-    let element = document.getElementById("overlay_login")
-    element.style.display = "block"
-}
-function closeLogin() {
-    let element = document.getElementById("overlay_login")
-    element.style.display = "none"
-} 
-// 開關註冊
-function openSignup() {
-    let element = document.getElementById("overlay_signup")
-    element.style.display = "block"
-}
-function closeSignup() {
-    let element = document.getElementById("overlay_signup")
-    element.style.display = "none"
-} 
-// 註冊系統
-function apiSingup(){
-    const nameElement = document.getElementById("input_signup_name");
-    const name = nameElement.value;
-    const emailElement = document.getElementById("input_signup_email");
-    const email = emailElement.value;
-    const passwordElement = document.getElementById("input_signup_password");
-    const password = passwordElement.value;
-
-    console.log(name);
-    console.log(email);
-    console.log(password);
-    let data=
-        {
-            name:name,
-            email:email,
-            password:password
-        };
-        console.log(data,"你好")
-    fetch("/api/user",{
-        method: "POST" ,
-        credentials: "include",
-        body:JSON.stringify(data),
-        cache:"no-cache",
-        headers:new Headers({
-            "content-type":"application/json"
-        })
-    })
-    .then((response) => {
-        // 這裡會得到一個 ReadableStream 的物件
-        // 可以透過 blob(), json(), text() 轉成可用的資訊
-        return response.json(); 
-    }).then((jsonData) => {
-        console.log(jsonData,"check 33")
-        console.log(jsonData.message)
-        if(jsonData.error==true){
-            document.getElementById("signup_message").innerHTML = jsonData.message 
-        }
-        if(jsonData.ok==true){
-            document.getElementById("signup_message").innerHTML = "註冊成功" 
-        }
-    }) 
-}
-// 登入系統的js 
-function apiSingin()
-{
-    const emailElement = document.getElementById("input_email");
-    const email = emailElement.value;
-    const passwordElement = document.getElementById("input_password");
-    const password = passwordElement.value;
-
-    console.log(email);
-    console.log(password);
-    let data=
-        {
-            email:email,
-            password:password
-        };
-    
-    console.log(data);
-    fetch("/api/user/auth",{
-        method: "PUT" ,
-        credentials: "include",
-        body:JSON.stringify(data),
-        cache:"no-cache",
-        headers:new Headers({
-            "content-type":"application/json"
-        })
-    })
-    .then(function(response){
-        if(response.status ==400){
-            console.log(`Response status was not 200:${response.status}`);
-            console.log(data)
-            document.getElementById("signin_message").innerHTML = "帳號密碼有誤"
-            return ;
-        }
-        if(response.status ==200){
-            response.json().then(function(data){
-                console.log(data)
-                // document.getElementById("signin_message").innerHTML = "登入成功"
-                window.location.replace(location.href)
-            })
-        }
-    })
-}
-// 寫一個函式可以判斷使用者是否有登入
-function check()
-{
-    fetch("/api/user/auth",{
-        method: "GET" ,
-    })
-    .then((response) => {
-        // 這裡會得到一個 ReadableStream 的物件
-        // 可以透過 blob(), json(), text() 轉成可用的資訊
-        return response.json(); 
-    }).then((jsonData) => {
-        console.log(jsonData,"check 1");
-        console.log(jsonData.data);
-        if(jsonData.data!=false){
-            let element = document.querySelector(".right_login");
-            element.style.display="none";
-            let signoutElement = document.querySelector(".right_logout");
-            signoutElement.style.display="block";
-            signoutElement.style.display="flex";
-        }
-        else{
-            let element = document.querySelector(".right_login");
-            element.style.display="block";
-            element.style.display="flex";
-            let signoutElement = document.querySelector(".right_logout");
-            signoutElement.style.display="none";
-        }
-    })
-}
-
-// 登出系統
-function logout()
-{
-    fetch("/api/user/auth",{
-        method: "DELETE" ,
-    })
-    .then((response) => {
-        // 這裡會得到一個 ReadableStream 的物件
-        // 可以透過 blob(), json(), text() 轉成可用的資訊
-        return response.json(); 
-    }).then((jsonData) => {
-        console.log(jsonData,"check 2")
-        window.location.replace(location.href)
-        
-    })
-}
-check();
 function daynightCheck() {
     if (document.getElementById("daytime").checked) {
         document.getElementById("daytime_cost").style.display ="block";
@@ -257,4 +99,69 @@ function showSlides(n) {
     }
     slides[slideIndex-1].style.display = "block";
     dots[slideIndex-1].className += " active";
+}
+// 預定行程按鈕函式
+function newBooking()
+{
+    // 要先確認是否有登入！
+    const loginOrnot = document.querySelector(".right_logout");
+    const login = loginOrnot.style.display;
+    // console.log(login)
+    if(login=="none"){
+        openLogin();
+        return
+    }
+
+    const pathUrl = location.pathname ;
+    const strAry = pathUrl.split('/attraction/');
+    const id = strAry[1]
+    // console.log(id);
+    
+    const dateElement = document.getElementById("date");
+    const date = dateElement.value;
+    // console.log(date);
+    const dayElement = document.getElementById("daytime_cost");
+    const day = dayElement.style.display;
+    // console.log(day);
+    let time="";
+    let price="";
+    if(day=="none"){
+        time = "afternoon";
+        price = 2500;
+
+    }
+    if(day=="block"){
+        time = "morning";
+        price = 2000;
+    }
+    else{
+
+    }
+    let data=
+        {
+            attraction:id,
+            date:date,
+            time:time,
+            price:price
+        };
+    fetch("/api/booking",{
+        method: "POST" ,
+        credentials: "include",
+        body:JSON.stringify(data),
+        cache:"no-cache",
+        headers:new Headers({
+            "content-type":"application/json"
+        })
+    })
+    .then(function(response){
+        if(response.status ==400){
+            document.getElementById("error_message").innerHTML = "請選擇日期和時間"
+            return ;
+        }
+        if(response.status ==200){
+            response.json().then(function(data){
+                window.location.href="/booking";
+            })
+        }
+    })
 }

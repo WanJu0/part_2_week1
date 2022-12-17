@@ -70,7 +70,7 @@ def api_attraction():
                 # print(photo)
                 # print(photo[0])
                 photo_str = photo[0].split(',')
-                print(photo_str)
+                # print(photo_str)
                 attraction_list={
                     "id":id ,
                     "name":name,
@@ -230,7 +230,7 @@ def signup():
             "error":True,
             "message":"請輸入帳號密碼"
         }
-        print(data)
+        # print(data)
         json_result=jsonify(data)
         return json_result,400
     
@@ -241,7 +241,7 @@ def signup():
         # 檢查姓名 帳號是否存在
         mycursor.execute('SELECT * FROM member WHERE name=%s or email =%s ' ,(name, email))
         result = mycursor.fetchone()
-        print(result)
+        # print(result)
         if result != None:
             data={
                 "error":True,
@@ -258,7 +258,7 @@ def signup():
         data={
             "ok":True,
         }
-        print(data)
+        # print(data)
         json_result=jsonify(data)
         mycursor.close()
         connection_object.close()
@@ -275,8 +275,6 @@ def signup():
 # 登入系統！
 @app.route("/api/user/auth",methods=["PUT"])
 def signin():   
-    # d = request.get_json()
-    # print(d)
     email=request.json["email"]
     password=request.json["password"]
     #登入帳號密碼不能為空
@@ -285,7 +283,7 @@ def signin():
             "error":True,
             "message":"請輸入帳號密碼"
         }
-        print(data)
+        # print(data)
         json_result=jsonify(data)
         return json_result,400
     # 和資料庫做互動
@@ -307,22 +305,18 @@ def signin():
             json_result=jsonify(data)
             return json_result,400
         # 用jwt產生token
-        # print({"email":email})
-
+        
         encoded_jwt = jwt.encode({
             "id":result[0],
             "name":result[1],
             "email":result[2],
             # "exp": datetime.utcnow() + timedelta(minutes=1)
             },"secretJWT", algorithm='HS256')
-        # print(encoded_jwt,"jwtencode")
-        # print(result[0])
-        # print(result[1])
-        # print(result[2])
+        # print(encoded_jwt)
         data={
             "ok":True,
         }
-
+        
         response = make_response(jsonify(data))
         response.set_cookie(key="Set-Cookie", value=encoded_jwt, max_age=604800)
         json_result=jsonify(data)
@@ -345,7 +339,7 @@ def signin_get():
     cookie=request.cookies.get("Set-Cookie")
     if cookie != None:
         decode= jwt.decode(cookie, "secretJWT", ['HS256'])
-        print(decode)
+        # print(decode)
         data={
             "data":decode
         }
@@ -359,9 +353,6 @@ def signin_get():
 
 @app.route("/api/user/auth",methods=["DELETE"])
 def signout():  
-    
-    # cookie=request.cookies.get("Set-Cookie")
-    # cookie.set_cookie(cookie, " ",  max_age=-1)
     data={
         "ok":True
     }
@@ -370,4 +361,203 @@ def signout():
 
     return response,200
 
+@app.route("/api/booking",methods=["POST"])
+def apiBooking():
+    # 從前端接收資料
+   
+    attraction=request.json["attraction"]
+    date=request.json["date"]
+    time=request.json["time"]
+    price=request.json["price"]
+    # print(attraction)
+    # print(date)
+    # print(time)
+    # print(price)
+    # 一定要先登入,先檢查是否有登入
+    cookie=request.cookies.get("Set-Cookie")
+    print(cookie)
+    if cookie != None:
+        decode= jwt.decode(cookie, "secretJWT", ['HS256'])
+        member_id=decode["id"]
+        member_name=decode["name"]
+        # print(decode,"20221216")
+        # print(decode["id"])
+        # print(decode["name"])
+        
+        # 每個資料都不能為空
+        if time=="" or date=="":
+            data={
+                "error":True,
+                "message":"請選擇日期和時間"
+            }
+            # print(data)
+            json_result=jsonify(data)
+            return json_result,400
+        # 和資料庫做互動
+        connection_object = connection_pool.get_connection()
+        mycursor = connection_object.cursor()
+        # 這邊要把資料放進去資料庫,並回傳狀態
+        try:
+            mycursor.execute("INSERT INTO reservation (member_id, attraction_id, date, time, price) VALUES (%s, %s, %s, %s, %s)" ,(member_id,attraction, date, time, price))
+            connection_object.commit()
+            print(mycursor.rowcount, "record inserted.")
+            data={
+                "ok":True,
+            }
+            # print(data)
+            json_result=jsonify(data)
+            mycursor.close()
+            connection_object.close()
+            return json_result, 200
+        except:
+            data={
+                "error": True,
+                "message":"伺服器錯誤"
+            }
+            json_result=jsonify(data)
+            mycursor.close()
+            connection_object.close()
+            return json_result,500
+    else:
+        data={
+                "error":True,
+                "message":"請先登入會員"
+            }
+        # print(data)
+        json_result=jsonify(data)
+        return json_result,403
+@app.route("/api/booking",methods=["GET"])
+def getBooking():
+    # 一定要先登入,先檢查是否有登入
+    cookie=request.cookies.get("Set-Cookie")
+    # print(cookie)
+    if cookie != None:
+        decode= jwt.decode(cookie, "secretJWT", ['HS256'])
+        member_id=decode["id"]
+        member_name=decode["name"]
+        # print(member_name)
+        # 和資料庫做互動
+        connection_object = connection_pool.get_connection()
+        mycursor = connection_object.cursor()
+        # 還需要利用attraction id 去抓出景點資訊
+        mycursor.execute('SELECT attraction.id, attraction.name,attraction.address,reservation.reservation_id,reservation.member_id,reservation.date,reservation.time,reservation.price FROM attraction INNER JOIN reservation ON attraction.id=reservation.attraction_id WHERE member_id=%s' ,(member_id,))
+        # 有使用者id就可以找出他的reservation資料
+        # mycursor.execute('SELECT * FROM reservation WHERE member_id=%s' ,(member_id,))
+        result = mycursor.fetchall()
+        if result != None:
+            data_value=[]
+            for i in range(0,len(result)):
+                attraction_id=result[i][0]
+                attraction_name=result[i][1]
+                attraction_address=result[i][2]
+                reservation_id=result[i][3]
+                date=result[i][5]
+                time=result[i][6]
+                price=result[i][7]
+
+                # print(result)
+                # print(attraction_id)
+                # print(attraction_name)
+                # print(attraction_address)
+                # print(reservation_id)
+                # print(date)
+                # print(time)
+                # print(price)
+                # 圖片處理
+                mycursor.execute("SELECT group_concat(photo) FROM attraction INNER JOIN photo ON attraction.id=photo.photo_id WHERE attraction.id=%s group by photo.photo_id" ,(attraction_id,))
+                photo = mycursor.fetchone()
+                # print(photo)
+                photo_str = photo[0].split(',')
+                # print(photo_str[0])
+                data={
+                    
+                    "attraction":{
+                        "id":attraction_id,
+                        "name":attraction_name,
+                        "address":attraction_address,
+                        "image":photo_str[0]
+                    },
+                    "date":str(date),
+                    "time":time,
+                    "price":price,
+                    "reservationID":reservation_id
+                    
+                }
+                data_value.append(data)	
+                
+            data={
+
+                "data":data_value
+            }
+            
+            json_result=jsonify(data)
+            # print(json_result)
+            mycursor.close()
+            connection_object.close()
+            return make_response(json_result,200)  
+            # return data, 200
+        else:
+            data={
+
+                "data":None
+            }
+            json_result=jsonify(data)
+            # print(json_result)
+            mycursor.close()
+            connection_object.close()
+            return make_response(json_result,200)  
+    else:
+        data={
+                "error":True,
+                "message":"請先登入會員"
+            }
+        # print(data)
+        json_result=jsonify(data) 
+        return make_response(json_result,403)  
+@app.route("/api/booking",methods=["DELETE"])
+def deleteBooking():
+    reservation_id=request.json["reservationID"]
+    print(reservation_id,"llll")
+    # 一定要先登入,先檢查是否有登入
+    cookie=request.cookies.get("Set-Cookie")
+    # print(cookie)
+    if cookie != None:
+        decode= jwt.decode(cookie, "secretJWT", ['HS256'])
+        member_id=decode["id"]
+        member_name=decode["name"]
+        # print(member_name)
+        # 和資料庫做互動
+        connection_object = connection_pool.get_connection()
+        mycursor = connection_object.cursor()
+        mycursor.execute("DELETE FROM reservation WHERE reservation_id=%s " ,(reservation_id,))
+        connection_object.commit()
+        print(mycursor.rowcount, "record inserted.")
+        if mycursor.rowcount !=0:
+            data={
+                "ok":True,
+            }
+            json_result=jsonify(data) 
+            mycursor.close()
+            connection_object.close()
+            return make_response(json_result,200)  
+        else:
+            data={
+                "error":True,
+                "message":"請在刪除一次"
+            }
+            # print(data)
+            json_result=jsonify(data) 
+            mycursor.close()
+            connection_object.close()
+            return make_response(json_result,403)  
+       
+       
+    else:
+        data={
+                "error":True,
+                "message":"請先登入會員"
+            }
+        # print(data)
+        json_result=jsonify(data) 
+        return make_response(json_result,403)  
 app.run(host="0.0.0.0",port=3000,debug=True)

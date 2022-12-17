@@ -17,9 +17,7 @@ function Attraction()
         let category = jsonData.data[0].category;
         let image = jsonData.data[0].images[0];
         let id = jsonData.data[0].id;
-        console.log(id);
-
-        
+       
         for (let i=0; i<jsonData.data.length; i++)
         {
             console.log("test2")
@@ -86,7 +84,6 @@ function Attraction()
         }
         if(isLoading==true){
             observer.observe(cards);   
-            console.log("test1")
         }
         
         nextPage = jsonData.nextPage;
@@ -107,21 +104,17 @@ function apiAttraction()
     let keywordElement = document.getElementById("search");
     keyword = keywordElement.value;
     // const data = {username}
-    console.log(keywordElement);
-    console.log(keyword,"打進去的字");
     fetch(`/api/attraction?keyword=${keyword}`, {})
     .then((response) => {
         // 這裡會得到一個 ReadableStream 的物件
         // 可以透過 blob(), json(), text() 轉成可用的資訊
         return response.json(); 
     }).then((jsonData) => {
-        console.log(nextPage,"景點搜尋")
         let attractionName = jsonData.data[0].name;
         let mrt = jsonData.data[0].mrt;
         let category = jsonData.data[0].category;
         let image = jsonData.data[0].images[0];
         let id = jsonData.data[0].id;
-        console.log(id,"1211");
     
         for (let i=0; i<jsonData.data.length; i++)
         {
@@ -182,9 +175,6 @@ function apiAttraction()
         nextPage = jsonData.nextPage;
         keyword=keywordElement.value;
         observer.observe(cards);   
-        console.log(nextPage,"跑完搜尋第一頁");
-        
-        
     })
 }
 function apiCategory()
@@ -196,8 +186,6 @@ function apiCategory()
         return response.json(); 
     }).then((jsonData) => {
         let categories = jsonData.data;
-        console.log(categories);
-        console.log(categories[0]);
         for (let i=0; i<jsonData.data.length; i++)
         {
             let catrgory_content=document.getElementById("search_category");
@@ -258,20 +246,13 @@ threshold: 1,
 //設定call back
 const callback = (entries) => 
 {
-    console.log("hello")
-    console.log(keyword,1111)
-    
-        console.log(nextPage,"aaaaaa")
         if(nextPage == null) return;
         if (entries[0].isIntersecting)
-        {   console.log(nextPage,"bbbbbb");
-        
+        {   
             if(nextPage!==null ){
-                console.log(nextPage,"1234567")
                 isLoading=true;
                 fetch(`/api/attraction?page=${nextPage}&keyword=${keyword}`, {})
             .then((response) => {
-                console.log(nextPage,"333333")
                 // 這裡會得到一個 ReadableStream 的物件
                 // 可以透過 blob(), json(), text() 轉成可用的資訊
                 return response.json(); 
@@ -339,16 +320,9 @@ const callback = (entries) =>
                 attractionCategory.appendChild(categoryNode);
                 // 再將資料放進attraction_content
                 attraction_information.appendChild(attractionCategory);
-            }
-            
+            } 
             nextPage = jsonData.nextPage;
-            console.log(nextPage);
-    
-            
             })
-        }
-        else{
-            console.log("不重疊")
         }
     } 
 }
@@ -359,158 +333,3 @@ apiCategory();
 // 追蹤footer
 let observer = new IntersectionObserver(callback, options)
 const cards = document.querySelector("footer");
-
-// 點擊或關閉註冊和登入div
-function openLogin() {
-    let element = document.getElementById("overlay_login")
-    element.style.display = "block"
-}
-function closeLogin() {
-    let element = document.getElementById("overlay_login")
-    element.style.display = "none"
-} 
-// 開關註冊
-function openSignup() {
-    let element = document.getElementById("overlay_signup")
-    element.style.display = "block"
-}
-function closeSignup() {
-    let element = document.getElementById("overlay_signup")
-    element.style.display = "none"
-} 
-// 註冊系統
-function apiSingup(){
-    const nameElement = document.getElementById("input_signup_name");
-    const name = nameElement.value;
-    const emailElement = document.getElementById("input_signup_email");
-    const email = emailElement.value;
-    const passwordElement = document.getElementById("input_signup_password");
-    const password = passwordElement.value;
-
-    console.log(name);
-    console.log(email);
-    console.log(password);
-    let data=
-        {
-            name:name,
-            email:email,
-            password:password
-        };
-    fetch("/api/user",{
-        method: "POST" ,
-        credentials: "include",
-        body:JSON.stringify(data),
-        cache:"no-cache",
-        headers:new Headers({
-            "content-type":"application/json"
-        })
-    })
-    .then((response) => {
-        // 這裡會得到一個 ReadableStream 的物件
-        // 可以透過 blob(), json(), text() 轉成可用的資訊
-        return response.json(); 
-    }).then((jsonData) => {
-        console.log(jsonData,"check 33")
-        console.log(jsonData.message)
-        if(jsonData.error==true){
-            document.getElementById("signup_message").innerHTML = jsonData.message ;
-        }
-        if(jsonData.ok==true){
-            document.getElementById("signup_message").innerHTML = "註冊成功" ;
-            document.getElementById("login_btn").style.margin="0px";
-
-        }
-    })
-}
-// 登入系統的js 
-function apiSingin()
-{
-    const emailElement = document.getElementById("input_email");
-    const email = emailElement.value;
-    const passwordElement = document.getElementById("input_password");
-    const password = passwordElement.value;
-
-    console.log(email);
-    console.log(password);
-    let data=
-        {
-            email:email,
-            password:password
-        };
-    
-    console.log(data);
-    fetch("/api/user/auth",{
-        method: "PUT" ,
-        credentials: "include",
-        body:JSON.stringify(data),
-        cache:"no-cache",
-        headers:new Headers({
-            "content-type":"application/json"
-        })
-    })
-    .then(function(response){
-        if(response.status ==400){
-            console.log(`Response status was not 200:${response.status}`);
-            console.log(data)
-            document.getElementById("signin_message").innerHTML = "帳號密碼有誤"
-            return ;
-        }
-        if(response.status ==200){
-            response.json().then(function(data){
-                console.log(data)
-                // document.getElementById("signin_message").innerHTML = "登入成功"
-                window.location.replace(location.href)
-            })
-        }
-
-    })
-    
-}
-// 寫一個函式可以判斷使用者是否有登入
-function check()
-{
-    fetch("/api/user/auth",{
-        method: "GET" ,
-    })
-    .then((response) => {
-        // 這裡會得到一個 ReadableStream 的物件
-        // 可以透過 blob(), json(), text() 轉成可用的資訊
-        return response.json(); 
-    }).then((jsonData) => {
-        console.log(jsonData,"check 1")
-        console.log(jsonData.data)
-        if(jsonData.data!=false){
-            let element = document.querySelector(".right_login")
-            element.style.display="none"
-            let signoutElement = document.querySelector(".right_logout")
-            signoutElement.style.display="block"
-            signoutElement.style.display="flex"
-        }
-        else{
-            let element = document.querySelector(".right_login")
-            element.style.display="block"
-            element.style.display="flex"
-            let signoutElement = document.querySelector(".right_logout")
-            signoutElement.style.display="none"
-            
-        }
-        
-    })
-}
-check()
-// 登出系統
-function logout()
-{
-    fetch("/api/user/auth",{
-        method: "DELETE" ,
-    })
-    .then((response) => {
-        // 這裡會得到一個 ReadableStream 的物件
-        // 可以透過 blob(), json(), text() 轉成可用的資訊
-        return response.json(); 
-    }).then((jsonData) => {
-        console.log(jsonData,"check 2")
-        window.location.replace(location.href)
-        
-    })
-}
