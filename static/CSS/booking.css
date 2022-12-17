@@ -138,6 +138,7 @@ div[id^=booking_date],div[id^=booking_time],div[id^=booking_cost],div[id^=bookin
     position:absolute;
     top: 0;
     right: 0;
+    cursor: pointer;
 }
 #total_price{
     width: 154px;
