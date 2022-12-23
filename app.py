@@ -1,10 +1,13 @@
 import json
 import jwt
+import requests
 from flask import jsonify
 import mysql.connector
 from mysql.connector.pooling import MySQLConnectionPool
 from mySQL import MySQLPassword
 from datetime import datetime, timedelta
+import datetime
+import random
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(
     user='root',
     password=MySQLPassword(),
@@ -19,7 +22,7 @@ app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 import json
-from flask import jsonify 
+
 # Pages
 @app.route("/")
 def index():
@@ -484,7 +487,7 @@ def getBooking():
                     
                 }
                 data_value.append(data)	
-                
+
             data={
 
                 "data":data_value
@@ -560,4 +563,205 @@ def deleteBooking():
         # print(data)
         json_result=jsonify(data) 
         return make_response(json_result,403)  
+@app.route("/api/orders",methods=["POST"])
+def apiOrders():
+    # 一定要先登入,先檢查是否有登入
+    cookie=request.cookies.get("Set-Cookie")
+    print(cookie)
+    if cookie != None:
+        decode= jwt.decode(cookie, "secretJWT", ['HS256'])
+        member_id=decode["id"]
+        member_name=decode["name"]
+        # 從前端接收資料
+        ab=request.json
+        print(ab)
+        # 預定訂單編號的所有列表
+        
+        reservationNum=len(request.json["order"]["trip"])
+        prime=request.json["prime"]
+        total_price=request.json["order"]["price"]
+        name=request.json["order"]["contact"]["name"]
+        email=request.json["order"]["contact"]["email"]
+        phone=request.json["order"]["contact"]["phone"]
+        payment_status="未付款"
+        # 產生當下日期時間
+        now = datetime.datetime.now()
+        # 產生六位隨機號碼
+        rand = ''.join(str(random.randint(0, 9)) for _ in range(6))
+        # 將日期時間和隨機號碼組合成訂單編號
+        order_number = f"{now.strftime('%Y%m%d%H%M%S')}{rand}"
+        print(order_number)
+        
+        # 每個資料都不能為空
+        if name=="" or email=="" or phone=="":
+            data={
+                "error":True,
+                "message":"請正確填寫姓名,信箱,電話"
+            }
+            # print(data)
+            json_result=jsonify(data)
+            return make_response(json_result,400)  
+        for i in range(0,reservationNum):
+            reservation_id=request.json["order"]["trip"][i]["reservationID"]
+            attraction_id=request.json["order"]["trip"][i]["attraction"]["id"]
+            date=request.json["order"]["trip"][i]["date"]
+            time=request.json["order"]["trip"][i]["time"]
+            price=request.json["order"]["trip"][i]["price"]
+            connection_object = connection_pool.get_connection()
+            mycursor = connection_object.cursor()
+            try:
+                mycursor.execute("INSERT INTO order_model(order_number, member_id, phone, attraction_id, date, time, price, payment_status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" ,(order_number, member_id, phone, attraction_id, date, time, price, payment_status))
+                connection_object.commit()
+                print(mycursor.rowcount, "record inserted.")
+
+                # # 成立order訂單的同時刪除 booking裡的預定資訊(用reservationID刪除)
+                mycursor.execute("DELETE FROM reservation WHERE reservation_id=%s " ,(reservation_id,))
+                connection_object.commit()
+                print(mycursor.rowcount, "record delete.")
+
+                print(price)
+            except:
+                data={
+                    "error": True,
+                    "message":"伺服器錯誤"
+                }
+                json_result=jsonify(data)
+                mycursor.close()
+                connection_object.close()
+                return json_result,500
+        print(prime)
+        print(total_price)
+        print(name)
+        print(phone)
+        print(reservationNum,"len")
+        print(reservation_id)
+        
+        # 然後進入tappay api
+        mydata={
+            "prime":prime,
+            "partner_key": "partner_r3zqFU0dKDS6gH6n5SzwYHgEmft52ib29bZiDkNup207HiKBMPm0TpDf",
+            "merchant_id": "t2roioaui_CTBC",
+            "details":"TapPay Test",
+            "amount":int(total_price),
+            "cardholder": {
+                "phone_number": phone,
+                "name": name,
+                "email": email,
+            },    
+        }
+        myheaders={
+            "content-type":"application/json",
+            "x-api-key": "partner_r3zqFU0dKDS6gH6n5SzwYHgEmft52ib29bZiDkNup207HiKBMPm0TpDf",
+        }
+        response=requests.post("https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime",headers=myheaders,json= mydata).json()
+        print(response["status"])
+        print(response)
+        # 如果匯款成功,則傳訂單編號給前端並顯示訂單完成
+        if response["status"] ==0:
+            new_status="已付款"
+            # 產生當下日期時間
+            paymentTime = datetime.datetime.now()
+            try:
+                mycursor.execute("UPDATE order_model SET payment_status=%s, payment_time=%s WHERE order_number=%s" ,(new_status, paymentTime, order_number,))
+                connection_object.commit()
+                data={
+                    "data": {
+                        "number": order_number,
+                        "payment": {
+                        "status": 0,
+                        "message": "付款成功"
+                        }
+                    }
+                }
+                json_result=jsonify(data) 
+                mycursor.close()
+                connection_object.close()
+                return make_response(json_result,200)  
+            except:
+                data={
+                    "error": True,
+                    "message":"伺服器錯誤"
+                }
+                json_result=jsonify(data)
+                mycursor.close()
+                connection_object.close()
+                return json_result,500
+        else:
+            data={
+                "data": {
+                    "number": order_number,
+                    "payment": {
+                    "status": response["status"],
+                    "message": response["msg"]
+                    }
+                }
+            }
+            # print(data)
+            json_result=jsonify(data) 
+            mycursor.close()
+            connection_object.close()
+            return make_response(json_result,400)  
+    else:
+        data={
+                "error":True,
+                "message":"請先登入會員"
+            }
+        # print(data)
+        json_result=jsonify(data)
+        return json_result,403
+@app.route("/api/orders/<orderNumber>",methods=["GET"])
+def getOrders(orderNumber):
+    connection_object = connection_pool.get_connection()
+    mycursor=connection_object.cursor()
+    try:
+        mycursor.execute("SELECT * FROM order_model WHERE order_number=%s",(orderNumber,))
+        result = mycursor.fetchall()
+        # print(type(result))
+        if result != None:
+            print(result)
+           
+            # attraction_list={
+            #     "id":id ,
+            #     "name":name,
+            #     "category":category,
+            #     "description":description,
+            #     "address":address,
+            #     "transport":transport,
+            #     "mrt":mrt,
+            #     "lat":lat,
+            #     "lng":lng,
+            #     "images":photo_str
+            # }
+            
+            # data={
+            #     "data":attraction_list
+            # }
+			
+            # json_result=jsonify(data)
+            # # print(json_result)
+            # mycursor.close()
+            # connection_object.close()
+            # return json_result
+            return "1111"
+        else:
+            data={
+            "error": True,
+            "message":"編號不存在"
+            }
+            json_result=jsonify(data)
+            mycursor.close()
+            connection_object.close()
+            return json_result,400
+            
+    except:
+        data={
+            "error": True,
+            "message":"伺服器錯誤"
+        }
+        json_result=jsonify(data)
+        mycursor.close()
+        connection_object.close()
+        return json_result,500
+
+
 app.run(host="0.0.0.0",port=3000,debug=True)
