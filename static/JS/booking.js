@@ -31,6 +31,8 @@ fetch("/api/user/auth", {
     })
 
 let total_price = 0;
+// 先讓尚未付款的預約行程存在全域
+let attractionName ="";
 fetch("/api/booking", {})
     .then((response) => {
         // 這裡會得到一個 ReadableStream 的物件
@@ -52,7 +54,8 @@ fetch("/api/booking", {})
             bookingPrice.style.display = "none"
 
         }
-        let attractionName = jsonData.data;
+        attractionName = jsonData.data;
+        // console.log(attractionName,"jsbooking")
         for (let i = 0; i < jsonData.data.length; i++) {
             // 新增一個連結在最外層
             // 建立booking_content 容器 並放入一開始在html建立的content

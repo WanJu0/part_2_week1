@@ -124,7 +124,7 @@ div[id^=booking_date],div[id^=booking_time],div[id^=booking_cost],div[id^=bookin
     margin: 0 auto;
     margin-bottom: 40px;
 }
-#input_contact_name,#input_contact_mail,#input_contact_mail,
+#input_contact_name,#input_contact_mail,#input_contact_phone,
 #credit_number_content,#credit_number_content,#credit_secret_content{
     width: 200px;
     height: 38px;
