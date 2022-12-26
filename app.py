@@ -8,11 +8,20 @@ from mySQL import MySQLPassword
 from datetime import datetime, timedelta
 import datetime
 import random
+from dotenv import load_dotenv
+load_dotenv()
+import os
+
+mysql_username = os.getenv("MYSQL_USERNAME")
+mysql_password = os.getenv("MYSQL_PASSWORD")
+mysql_host = os.getenv("MYSQL_HOST")
+mysql_database = os.getenv("MYSQL_DATABASE")
+
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(
-    user='root',
-    password=MySQLPassword(),
-    host='127.0.0.1',
-    database='taipei_trip',
+    user=mysql_username,
+    password=mysql_password,
+    host=mysql_host,
+    database=mysql_database ,
     pool_name = "taipei_pool",
     pool_size = 32,
     pool_reset_session = True,
@@ -637,9 +646,10 @@ def apiOrders():
         print(reservation_id)
         
         # 然後進入tappay api
+        partner_key = os.getenv("TAPPAY_PARTNER_KEY")
         mydata={
             "prime":prime,
-            "partner_key": "partner_r3zqFU0dKDS6gH6n5SzwYHgEmft52ib29bZiDkNup207HiKBMPm0TpDf",
+            "partner_key": partner_key,
             "merchant_id": "t2roioaui_CTBC",
             "details":"TapPay Test",
             "amount":int(total_price),
@@ -651,7 +661,7 @@ def apiOrders():
         }
         myheaders={
             "content-type":"application/json",
-            "x-api-key": "partner_r3zqFU0dKDS6gH6n5SzwYHgEmft52ib29bZiDkNup207HiKBMPm0TpDf",
+            "x-api-key": partner_key,
         }
         response=requests.post("https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime",headers=myheaders,json= mydata).json()
         print(response["status"])
@@ -711,57 +721,107 @@ def apiOrders():
         return json_result,403
 @app.route("/api/orders/<orderNumber>",methods=["GET"])
 def getOrders(orderNumber):
-    connection_object = connection_pool.get_connection()
-    mycursor=connection_object.cursor()
-    try:
-        mycursor.execute("SELECT * FROM order_model WHERE order_number=%s",(orderNumber,))
-        result = mycursor.fetchall()
-        # print(type(result))
-        if result != None:
-            print(result)
-           
-            # attraction_list={
-            #     "id":id ,
-            #     "name":name,
-            #     "category":category,
-            #     "description":description,
-            #     "address":address,
-            #     "transport":transport,
-            #     "mrt":mrt,
-            #     "lat":lat,
-            #     "lng":lng,
-            #     "images":photo_str
-            # }
-            
-            # data={
-            #     "data":attraction_list
-            # }
-			
-            # json_result=jsonify(data)
-            # # print(json_result)
-            # mycursor.close()
-            # connection_object.close()
-            # return json_result
-            return "1111"
-        else:
+    # 一定要先登入,先檢查是否有登入
+    cookie=request.cookies.get("Set-Cookie")
+    # print(cookie)
+    if cookie != None:
+        decode= jwt.decode(cookie, "secretJWT", ['HS256'])
+        print(decode)
+        member_id=decode["id"]
+        member_name=decode["name"]
+        member_email=decode["email"]
+        connection_object = connection_pool.get_connection()
+        mycursor=connection_object.cursor(dictionary=True)
+        try:
+            mycursor.execute("SELECT * FROM order_model JOIN attraction ON order_model.attraction_id=attraction.id WHERE order_number=%s",(orderNumber,))
+            result = mycursor.fetchall()
+            # 將訂購總金額計算出來
+            mycursor.execute("SELECT * FROM order_model JOIN attraction ON order_model.attraction_id=attraction.id WHERE order_number=%s",(orderNumber,))
+            total= mycursor.fetchall()
+            # 這邊先將
+            if result != None:
+
+                data_value=[]
+                
+                print(len(result))
+                print(result[0])
+                print(result[0]["price"])
+                print(result[1]["price"])
+                attraction_id=result[0]["attraction_id"]
+                attraction_name=result[0]["name"]
+                attraction_address=result[0]["address"]
+                print(attraction_id)
+                print(attraction_name)
+                print(attraction_address)
+                data_value=[]
+                for i in range(0,len(result)):
+                    attraction_id=result[i]["attraction_id"]
+                    attraction_name=result[i]["name"]
+                    print(attraction_id)
+
+                    # 圖片處理
+                    mycursor.execute("SELECT group_concat(photo) FROM attraction INNER JOIN photo ON attraction.id=photo.photo_id WHERE attraction.id=%s group by photo.photo_id" ,(attraction_id,))
+                    photo = mycursor.fetchone()
+                    print(photo["group_concat(photo)"])
+                    print(photo["group_concat(photo)"])
+                    photo_str = photo["group_concat(photo)"].split(',')
+                    print(photo_str[0])
+                    data={
+                        "attraction":{
+                            "id":result[i]["attraction_id"],
+                            "name":result[i]["name"],
+                            "address":result[i]["address"],
+                            "image":photo_str[0]
+                        },
+                        "date":str(result[i]["date"]),
+                        "time":result[i]["time"]
+                    }
+                    data_value.append(data)	
+                print(data_value,"111")
+                data={
+                    "data":{
+                        "number":orderNumber,
+                        # "price":
+                        "trip":data_value
+                    },
+                    "contact":{
+                        "name":member_name,
+                        "email":member_email,
+                        "phone":result[0]["phone"]
+                    }
+                }
+                json_result=jsonify(data)
+                # print(json_result)
+                mycursor.close()
+                connection_object.close()
+                return make_response(json_result,200) 
+                # return "111" 
+            else:
+                data={
+                "error": True,
+                "message":"編號不存在"
+                }
+                json_result=jsonify(data)
+                mycursor.close()
+                connection_object.close()
+                return json_result,400
+                
+        except:
             data={
-            "error": True,
-            "message":"編號不存在"
+                "error": True,
+                "message":"伺服器錯誤"
             }
             json_result=jsonify(data)
             mycursor.close()
             connection_object.close()
-            return json_result,400
-            
-    except:
+            return json_result,500
+    else:
         data={
-            "error": True,
-            "message":"伺服器錯誤"
-        }
-        json_result=jsonify(data)
-        mycursor.close()
-        connection_object.close()
-        return json_result,500
-
+                "error":True,
+                "message":"請先登入會員"
+            }
+        # print(data)
+        json_result=jsonify(data) 
+        return make_response(json_result,403)  
 
 app.run(host="0.0.0.0",port=3000,debug=True)
