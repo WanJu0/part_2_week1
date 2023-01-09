@@ -840,9 +840,11 @@ def historyOrders(memberID):
 # 連接到aws s3
 client = boto3.client('s3')
 print(client,"123")
+aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID")
+aws_secret_access_key=os.getenv("AWS_SECRECT_ACCESS_KEY")
 s3 = boto3.resource('s3',
-    aws_access_key_id="AKIATJVY3KFA4E7LPCN2",
-    aws_secret_access_key="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",
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
     region_name="ap-northeast-1")
 # for bucket in s3.buckets.all():
 #     print(bucket.name)
