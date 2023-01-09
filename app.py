@@ -844,8 +844,8 @@ s3 = boto3.resource('s3',
     aws_access_key_id="AKIATJVY3KFA4E7LPCN2",
     aws_secret_access_key="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",
     region_name="ap-northeast-1")
-for bucket in s3.buckets.all():
-    print(bucket.name)
+# for bucket in s3.buckets.all():
+#     print(bucket.name)
    
 # Upload a new file
 # s3.Bucket('taipeibucket').put_object(Key='test.jpg', Body=data)
