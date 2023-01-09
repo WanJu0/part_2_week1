@@ -162,3 +162,17 @@ function reservation()
     window.location.replace("/booking");
 
 }
+
+// 在member 頁面時也要確認是否有登入
+function member() {
+    // 要先確認是否有登入！
+    const loginOrnot = document.querySelector(".right_logout");
+    const login = loginOrnot.style.display;
+
+    if (login == "none") {
+        openLogin();
+        return
+    }
+    // 如有登入就跳轉到booking
+    window.location.replace("/member");
+}

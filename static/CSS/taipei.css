@@ -759,6 +759,13 @@ a{
     height: 100vh;
     display: none;
 }
+.member_icon{
+    align-items: center;
+    display: flex;
+    margin: 15px; 
+    margin-right: 10px;
+    cursor: pointer;
+}
  @media(max-width:1200px){
     
     #navigation_bar{
@@ -788,6 +795,7 @@ a{
     }
    
 }
+
 
 @media(max-width:800px){
     #Attraction_content{

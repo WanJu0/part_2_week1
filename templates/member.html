@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台北一日遊</title>
+    <title>會員頁面</title>
     <link rel="stylesheet" type="text/css" href="/static/CSS/taipei.css" />
-    <link rel="stylesheet" type="text/css" href="/static/CSS/thankyou.css" />
+    <link rel="stylesheet" type="text/css" href="/static/CSS/member.css" />
     
 </head>
 <div class="overlay_login" id="overlay_login">
@@ -72,23 +72,74 @@
             </div>
         </div>  
     </div>   
-    <div id="payment_Div">
-        <div class="payitem">行程預定成功</div>
-        <div class="payitem">您的訂單編號如下</div>
-        
-        <div id=orders_number></div>
-        <div class="payitem_mention">請記下您的訂單編碼,以利後續的查詢</div>
-        
+    <div id="member_div">
+        <div id="member_photo">
+            <input id="img_input2" type="file" accept="image/*"/>
+            <label for="img_input2" id="img_label2">
+                <img onclick="update_photo()" class="add_photo" src="" width="300" height="300"/>
+                <!-- <button onclick="update_photo()" id="update_button">更新大頭照</button> -->
+            </label>
+            <div id="preview_box2"></div>
+            
+        </div>
+        <div id="member_content">
+            
+            <div class="member_item">
+                <label>聯絡姓名 :</label><br/>
+                <input id="input_name" type="text" name="name" ></input><br/>
+            </div>
+            <div class="member_item">
+                <label>聯絡信箱 :</label><br/>
+                <input id="input_mail" type="email" name="name" placeholder="輸入信箱"/><br/>
+            </div>
+
+            <div class="member_item">
+                <label>手機號碼 : &nbsp </label><br/>
+                <input id="input_phone" type="tel" name="name" placeholder="輸入電話"/><br/>
+            </div>
+            <div class="member_item">
+                <label>性別:</label><br/>
+                <!-- <input id="input_gender" name="name"/><br/> -->
+                <div id="gender">
+                    <input type="radio" name="gender" id="male" >
+                    <label for="male">男性</label>
+                    <input type="radio" name="gender" id="female">
+                    <label for="female">女性</label>
+                </div>
+            </div>
+            <div class="member_item">
+                <label>緊急聯絡人:</label><br/>
+                <input id="Emergency_Contact" type="text"/><br/>
+            </div>
+            <div class="member_item">
+                <label>緊急聯絡人電話:</label><br/>
+                <input id="Emergency_phone" type="tel"/><br/>
+            </div>
+            <div class="member_item">
+                <label>生日:</label><br/>
+                <input type="date" name="date" id="member_date" /><br/>
+            </div>
+            <div id="update_member">
+                <div id="update_content"></div>
+                <button onclick="updateMember()" id="update_button">更新會員資料</button>
+            </div>
+            
+        </div>
         
     </div>
-    
+    <div class="separator_line"></div>
+    <div id="history_div">
+        <div class="history">歷史訂單</div>
 
+    </div>
+    
     <div class="footer_container">
         <footer>COPYRIGHT © 2022 台北一日遊</footer>    
     </div>
     <script src="/static/JS/common.js"></script>
-    <script src="/static/JS/thankyou.js"></script>
     <script src="/static/JS/member.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1285.0.min.js"></script>
+    
     
 </body>
 </html>

@@ -139,3 +139,6 @@ cython_debug/
 
 # mysql password
 /mySQL.py
+
+# tapPay password
+.env

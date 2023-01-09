@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台北一日遊</title>
+    <title>預定行程</title>
     <link rel="stylesheet" type="text/css" href="/static/CSS/taipei.css" />
     <link rel="stylesheet" type="text/css" href="/static/CSS/booking.css" />
     <link rel="stylesheet" type="text/css" href="/static/CSS/pay.css" />
@@ -64,6 +64,7 @@
                 </div>
             </div>
             <div class=right_logout>
+                <img class="member_icon" onclick="member()" src="/static/images/user.png" width="24" height="24"/>
                 <div class="item" onclick="reservation()">預定行程</div>
                 <div id="login_logout">
                     <div class="signout_btn" onclick="logout()" >登出系統</div>
@@ -123,5 +124,6 @@
     <script src="/static/JS/booking.js"></script>
     <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"></script>
     <script src="/static/JS/pay.js"></script>
+    <!-- <script src="/static/JS/member.js"></script> -->
 </body>
 </html>

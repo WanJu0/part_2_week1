@@ -1,0 +1,213 @@
+#member_div{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    margin-bottom: 40px
+}
+#member_photo{
+    background-color: #add;
+    width: 300px;
+    height: 300px;
+    margin: 15px;
+}
+#member_content{
+    width: 900px;
+    height: 300px;
+    margin: 15px;
+    grid-template-columns: 1fr 1fr 1fr;
+    display: grid;
+    position: relative;
+}
+.member_item{
+    margin: 10px;
+}
+#input_name,#input_mail,#input_phone,#input_gender,
+#Emergency_Contact,#member_date,#Emergency_phone{
+    width: 200px;
+    height: 30px;
+    padding-left: 0.5rem;
+    background: #FFFFFF;
+    border: 1px solid #E8E8E8;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-top: 5px;
+}
+#update_member{
+    position: absolute;
+    right: 20px;
+    bottom: 20px
+}
+#update_button{
+    width: 154px;
+    height: 36px;
+    background: #448899;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+    border: #448899;
+    cursor: pointer;
+}
+.add_photo{
+    cursor: pointer;
+}
+#img_input2 {
+    display: none;
+}
+#img_label2 {
+
+border-radius: 5px;
+display: inline-block;
+
+}
+#preview_box2 img {
+width: 200px;
+}
+.separator_line{
+    max-width: 1200px;
+    height: 0px;
+    border: 1px solid #E8E8E8;
+    margin: 0 auto;
+}
+#history_div{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    margin-bottom: 40px;
+}
+.history{
+    margin-top: 24px;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 16px;
+    color: #666666;
+    height: 30px;
+    
+}
+#order_number{
+    height: 40px;
+    background-color: aliceblue;
+    display: flex;
+    align-items: center;
+    color: #448899;
+    font-size: 20px;
+    cursor: pointer;
+}
+div[id^=history_number]{
+    align-items: center;
+    color: #448899;
+    font-size: 20px;
+    cursor: pointer;
+    border: 1px solid #e8e8e8;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+/* 歷史訂單 */
+#order_content{
+    max-width: 980px;
+    margin: 0 auto;
+
+}
+#order_photo{
+    background-color: beige;
+    width: 266px;
+    height: 200px;
+    margin-right: 22px;
+    margin-bottom: 40px;
+}
+div[id^=order_detail]{
+    display: flex;
+}
+#order_name{
+    margin-top: 46px;
+    margin-bottom: 35px;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 16px;
+    color: #666666;
+}
+div[id^=order_information]{
+    width: 700px;
+    height: 170px;
+    position: relative;
+}
+#order_attraction{
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+    color: #448899;
+    margin-bottom: 30px;
+}
+div[id^=order_date],div[id^=order_time],div[id^=order_cost],div[id^=order_location]{
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+    color: #666666;
+    margin-bottom: 20px;
+    display: flex;
+    
+}
+#add_Date,#add_time,#add_cost{
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+    color: #666666;
+}
+#male,#female{
+    width: 20px;
+    height: 20px;
+    margin: 10px;
+    accent-color: #448899;
+}
+#order_Div{
+    margin: 0 auto;
+    max-width: 1200px;
+}
+@media(max-width:1200px){
+    #member_content{
+        grid-template-columns: 1fr 1fr;
+        height: auto;
+    }
+}
+
+@media(max-width:850px){
+    #member_content{
+        grid-template-columns: 1fr ;
+        height: auto;
+        width: auto;
+    }
+    #member_div{
+        max-width: 800px;
+        display: block;
+    }
+    #update_member{
+        justify-content: flex-end;
+        margin-bottom: 20px;
+        margin-right: 10px;
+        display: flex;
+        position:initial;
+    }
+    #member_photo{
+        margin: 10px auto;
+    }
+    .member_item{
+        margin: 10px auto;
+    }
+    
+}
