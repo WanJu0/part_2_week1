@@ -134,9 +134,6 @@ function newBooking()
         time = "morning";
         price = 2000;
     }
-    else{
-
-    }
     let data=
         {
             attraction:id,
