@@ -838,8 +838,8 @@ def historyOrders(memberID):
         json_result=jsonify(data) 
         return make_response(json_result,403)  
 # 連接到aws s3
-client = boto3.client('s3')
-print(client,"123")
+# client = boto3.client('s3')
+# print(client,"123")
 aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID")
 aws_secret_access_key=os.getenv("AWS_SECRECT_ACCESS_KEY")
 s3 = boto3.resource('s3',
